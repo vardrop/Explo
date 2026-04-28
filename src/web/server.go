@@ -279,6 +279,7 @@ func (s *Server) registerRoutes() {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.Write(indexHTML)
 	})
+	s.mux.HandleFunc("GET /api/fields", s.handleGetFields)
 	s.mux.HandleFunc("GET /api/config", s.handleGetConfig)
 	s.mux.HandleFunc("GET /api/config/raw", s.handleGetConfigRaw)
 	s.mux.HandleFunc("POST /api/config", s.handleSaveConfig)
@@ -389,6 +390,14 @@ func (s *Server) handleGetConfig(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(ConfigResponse{Values: values, Sources: sources})
+}
+
+// handleGetFields returns the field definitions that drive the settings UI.
+func (s *Server) handleGetFields(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(configFields); err != nil {
+		http.Error(w, "encode error", http.StatusInternalServerError)
+	}
 }
 
 // handleGetConfigRaw returns the raw .env file contents as plain text.
