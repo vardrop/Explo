@@ -1,4 +1,4 @@
-FROM node:20-alpine AS ui-builder
+FROM node:lts-alpine AS ui-builder
 WORKDIR /app/src/web/frontend
 COPY src/web/frontend/package*.json ./
 RUN npm ci
