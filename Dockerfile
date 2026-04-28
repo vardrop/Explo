@@ -1,4 +1,4 @@
-FROM node:lts-alpine AS ui-builder
+FROM --platform=linux/amd64 node:lts-alpine AS ui-builder
 WORKDIR /app/src/web/frontend
 COPY src/web/frontend/package*.json ./
 RUN npm ci
